@@ -6,6 +6,8 @@ class Pipe {
     this.space = space;
     this.minPipeHeight = 75;
 
+    this.isDead = false;
+
     this.top = {
       y: this.minPipeHeight + Math.floor(Math.random() * 150),
     };
@@ -14,12 +16,17 @@ class Pipe {
     };
   }
 
+  checkIsLive() {
+    this.isDead = this.x + this.diameter < 0;
+  }
+
   draw(ctx, { top, bottom }) {
     ctx.drawImage(top.img, this.x, -top.height + this.top.y);
     ctx.drawImage(bottom.img, this.x, this.bottom.y);
   }
 
   update() {
+    this.checkIsLive();
     this.x--;
   }
 }

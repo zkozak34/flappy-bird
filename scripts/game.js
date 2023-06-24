@@ -77,6 +77,8 @@ class Game {
       bird.draw(this.ctx, this.frameCount, [this.assets.birdUpFlap, this.assets.birdMidFlap, this.assets.birdDownFlap])
     );
     this.drawPlayground(this.assets.base, this.canvas.height - this.assets.base.height);
+    this.ctx.font = "20px Arial";
+    this.ctx.fillText(`Score: ${this.score}`, 50, 50);
   }
 
   update() {
@@ -84,7 +86,14 @@ class Game {
     if (this.frameCount % 240 === 0) {
       this.pipes.push(new Pipe(this.width));
     }
-    this.pipes.forEach((pipe) => pipe.update());
+    this.pipes.forEach((pipe, index) => {
+      if (pipe.isDead) {
+        this.score++;
+        this.pipes.splice(index, 1);
+      }
+      pipe.update();
+      console.log(this.pipes.length);
+    });
     this.birds.forEach((bird, index) => {
       bird.update(this.pipes);
       if (bird.isDead) this.birds.splice(index, 1);
