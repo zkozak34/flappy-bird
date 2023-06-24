@@ -10,6 +10,7 @@ class Game {
 
     this.FPS = 60;
     this.frameCount = 0;
+    this.score = 0;
 
     this.assets = {
       background: {
@@ -49,13 +50,26 @@ class Game {
       this.pipes.push(new Pipe(this.width));
     }
     this.pipes.forEach((pipe) => pipe.update());
-    this.birds.forEach((bird) => bird.update(this.pipes));
+    this.birds.forEach((bird, index) => {
+      bird.update(this.pipes);
+      if (bird.isDead) this.birds.splice(index, 1);
+    });
+    if (!this.birds.length) {
+      this.restart();
+    }
   }
 
   loop() {
     requestAnimationFrame(() => this.loop());
     this.draw();
     this.update();
+  }
+
+  restart() {
+    this.score = 0;
+    this.frameCount = 0;
+    this.pipes = [new Pipe(this.width)];
+    this.birds = [new Bird()];
   }
 
   start() {

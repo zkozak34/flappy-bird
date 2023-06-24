@@ -36,7 +36,7 @@ class Bird {
       this.x + 34 < closePipe.x + closePipe.diameter &&
       (this.y < closePipe.top.y || this.y > closePipe.bottom.y)
     ) {
-      console.log("hit");
+      this.isDead = true;
     }
   }
 
