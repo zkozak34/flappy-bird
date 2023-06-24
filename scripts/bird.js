@@ -12,12 +12,14 @@ class Bird {
     this.assetsIndex = 0;
   }
 
-  checkIsLive(pipes) {
+  checkIsLive(pipes, cHeight) {
     const closePipe = pipes.filter((pipe) => pipe.x + pipe.diameter > this.x)[0];
     if (
-      this.x + 34 > closePipe.x &&
-      this.x + 34 < closePipe.x + closePipe.diameter &&
-      (this.y < closePipe.top.y || this.y + 24 > closePipe.bottom.y)
+      this.y < 0 ||
+      this.y > cHeight - 24 ||
+      (this.x + 34 > closePipe.x &&
+        this.x + 34 < closePipe.x + closePipe.diameter &&
+        (this.y < closePipe.top.y || this.y + 24 > closePipe.bottom.y))
     ) {
       this.isDead = true;
     }
@@ -29,7 +31,7 @@ class Bird {
     ctx.drawImage(assets[this.assetsIndex].img, this.x, this.y);
   }
 
-  update(pipes) {
+  update(pipes, cHeight) {
     this.y += this.gravity;
     this.gravity += this.velocity;
     this.gravity = Math.min(3, this.gravity);
@@ -38,7 +40,7 @@ class Bird {
         this.gravity = this.jump;
       }
     });
-    this.checkIsLive(pipes);
+    this.checkIsLive(pipes, cHeight);
   }
 }
 

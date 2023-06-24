@@ -92,10 +92,9 @@ class Game {
         this.pipes.splice(index, 1);
       }
       pipe.update();
-      console.log(this.pipes.length);
     });
     this.birds.forEach((bird, index) => {
-      bird.update(this.pipes);
+      bird.update(this.pipes, this.height - this.assets.base.height);
       if (bird.isDead) this.birds.splice(index, 1);
     });
     if (!this.birds.length) {
