@@ -23,24 +23,59 @@ class Game {
         width: 336,
         height: 112,
       },
+      pipeTop: {
+        path: "../assets/Objects/pipe-top.png",
+        width: 52,
+        height: 320,
+      },
+      pipeBottom: {
+        path: "../assets/Objects/pipe-bottom.png",
+        width: 52,
+        height: 320,
+      },
+      birdDownFlap: {
+        path: "../assets/Objects/yellowbird-downflap.png",
+        width: 34,
+        height: 24,
+      },
+      birdMidFlap: {
+        path: "../assets/Objects/yellowbird-midflap.png",
+        width: 34,
+        height: 24,
+      },
+      birdUpFlap: {
+        path: "../assets/Objects/yellowbird-upflap.png",
+        width: 34,
+        height: 24,
+      },
     };
 
     this.pipes = [new Pipe(this.width)];
     this.birds = [new Bird()];
   }
 
-  drawPlayground(source, y = 0) {
-    for (let x = 0; x < Math.ceil(this.width / source.width); x++) {
+  loadImages() {
+    Object.keys(this.assets).forEach((asset) => {
+      const source = this.assets[asset];
       const img = new Image();
       img.src = source.path;
-      this.ctx.drawImage(img, x * source.width, y);
+      this.assets[asset].img = img;
+    });
+  }
+
+  drawPlayground(source, y = 0) {
+    for (let x = 0; x < Math.ceil(this.width / source.width); x++) {
+      this.ctx.drawImage(source.img, x * source.width, y);
     }
   }
 
   draw() {
+    this.ctx.clearRect(0, 0, this.width, this.height);
     this.drawPlayground(this.assets.background);
-    this.pipes.forEach((pipe) => pipe.draw(this.ctx));
-    this.birds.forEach((bird) => bird.draw(this.ctx, this.frameCount));
+    this.pipes.forEach((pipe) => pipe.draw(this.ctx, { top: this.assets.pipeTop, bottom: this.assets.pipeBottom }));
+    this.birds.forEach((bird) =>
+      bird.draw(this.ctx, this.frameCount, [this.assets.birdUpFlap, this.assets.birdMidFlap, this.assets.birdDownFlap])
+    );
     this.drawPlayground(this.assets.base, this.canvas.height - this.assets.base.height);
   }
 
@@ -60,9 +95,11 @@ class Game {
   }
 
   loop() {
+    this.ctx.save();
     requestAnimationFrame(() => this.loop());
     this.draw();
     this.update();
+    this.ctx.restore();
   }
 
   restart() {
@@ -73,6 +110,7 @@ class Game {
   }
 
   start() {
+    this.loadImages();
     this.loop();
   }
 }

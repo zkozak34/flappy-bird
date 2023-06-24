@@ -6,19 +6,6 @@ class Pipe {
     this.space = space;
     this.minPipeHeight = 75;
 
-    this.assets = {
-      pipeTop: {
-        path: "../assets/Objects/pipe-top.png",
-        width: 52,
-        height: 320,
-      },
-      pipeBottom: {
-        path: "../assets/Objects/pipe-bottom.png",
-        width: 52,
-        height: 320,
-      },
-    };
-
     this.top = {
       y: this.minPipeHeight + Math.floor(Math.random() * 150),
     };
@@ -27,14 +14,9 @@ class Pipe {
     };
   }
 
-  draw(ctx) {
-    const imgTop = new Image();
-    imgTop.src = this.assets.pipeTop.path;
-    ctx.drawImage(imgTop, this.x, -this.assets.pipeTop.height + this.top.y);
-
-    const imgBottom = new Image();
-    imgBottom.src = this.assets.pipeBottom.path;
-    ctx.drawImage(imgBottom, this.x, this.bottom.y);
+  draw(ctx, { top, bottom }) {
+    ctx.drawImage(top.img, this.x, -top.height + this.top.y);
+    ctx.drawImage(bottom.img, this.x, this.bottom.y);
   }
 
   update() {

@@ -10,23 +10,6 @@ class Bird {
     this.isDead = false;
 
     this.assetsIndex = 0;
-    this.assets = {
-      birdDownFlap: {
-        path: "../assets/Objects/yellowbird-downflap.png",
-        width: 34,
-        height: 24,
-      },
-      birdMidFlap: {
-        path: "../assets/Objects/yellowbird-midflap.png",
-        width: 34,
-        height: 24,
-      },
-      birdUpFlap: {
-        path: "../assets/Objects/yellowbird-upflap.png",
-        width: 34,
-        height: 24,
-      },
-    };
   }
 
   checkIsLive(pipes) {
@@ -34,18 +17,16 @@ class Bird {
     if (
       this.x + 34 > closePipe.x &&
       this.x + 34 < closePipe.x + closePipe.diameter &&
-      (this.y < closePipe.top.y || this.y > closePipe.bottom.y)
+      (this.y < closePipe.top.y || this.y + 24 > closePipe.bottom.y)
     ) {
       this.isDead = true;
     }
   }
 
-  draw(ctx, frameCount) {
+  draw(ctx, frameCount, assets) {
     if (frameCount % 15 === 0) this.assetsIndex++;
     this.assetsIndex = this.assetsIndex % 3;
-    const birdPNG = new Image();
-    birdPNG.src = Object.values(this.assets)[this.assetsIndex].path;
-    ctx.drawImage(birdPNG, this.x, this.y);
+    ctx.drawImage(assets[this.assetsIndex].img, this.x, this.y);
   }
 
   update(pipes) {
